@@ -34,8 +34,11 @@ public class Reservation {
 		return checkOut;
 	}
 	
-	public Duration duration() {
-		return Duration.between(checkIn, checkOut);
+	public long duration() {
+		Duration duration = Duration.between(checkIn.atStartOfDay(), checkOut.atStartOfDay());
+		long days = duration.toDays();
+		return days;
+	
 	}
 	public void updateDates(LocalDate checkIn, LocalDate checkOut) {
 		this.checkIn = checkIn;
