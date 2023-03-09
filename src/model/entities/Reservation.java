@@ -4,6 +4,8 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import model.excpetions.DomainException;
+
 public class Reservation {
 
 	private Integer roomNumber;
@@ -13,6 +15,11 @@ public class Reservation {
 	private static DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	
 	public Reservation(Integer roomNumber, LocalDate checkIn, LocalDate checkOut) {
+		
+		if (!checkOut.isAfter(checkIn)){
+			throw new DomainException("Error in reservation: Check-out date must be after check-in date");
+		}
+		
 		this.roomNumber = roomNumber;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -40,27 +47,22 @@ public class Reservation {
 		return days;
 	
 	}
-	public String updateDates(LocalDate checkIn, LocalDate checkOut) {
+	public void updateDates(LocalDate checkIn, LocalDate checkOut) {
 		
 		LocalDate now = LocalDate.now();
-		
-		System.out.println(now);
-		System.out.println(checkOut);
-		System.out.println(checkIn);
-		
 		if (checkIn.isBefore(now) || checkOut.isBefore(now)) {
-			return "Reservation dates for uptade must be futurde dates";
+			throw new DomainException("Reservation dates for uptade must be futurde dates");
 
 		}
 		
 		if (!checkOut.isAfter(checkIn)){
-			return "Error in reservation: Check-out date must be after check-in date";
+			throw new DomainException("Error in reservation: Check-out date must be after check-in date");
 
 		}
 		
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
-		return null;
+		
 	}
 	
 	@Override
